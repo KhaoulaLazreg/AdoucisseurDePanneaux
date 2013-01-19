@@ -16,3 +16,6 @@
 *.out
 *.app
 adoucisseur
+
+# Program output
+imageGris.bmp
