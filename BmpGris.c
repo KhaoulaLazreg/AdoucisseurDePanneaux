@@ -152,3 +152,36 @@ for ( i = 0; i < 255; ++i)
 
   libereDonneesImageRGB(&donneesRGB); 
 }
+void sobel(char * nom){
+
+ DonneesImageRGB *donneesRGB = lisBMPRGB(nom);
+     int i,j,max=1;
+    int valMax=339;
+    unsigned int gris[256];
+    for ( i = 0; i < 256; i++)
+    {
+       gris[i]=0;
+    }
+  int l=donneesRGB->largeurImage;
+    int h=donneesRGB->hauteurImage;
+   for( i = 0; i < l; i++)
+    for( j = 0; j < h; j++){
+   gris[donneesRGB->donneesRGB[(l*i+j)*3]]+=1;
+}
+for ( i = 0; i < 256; i++)
+{
+    if(max<gris[i])
+    max=gris[i];
+}
+
+
+epaisseurDeTrait(3);
+couleurCourante(40,140,40);
+for ( i = 0; i < 255; ++i)
+{
+    ligne((float)(25+4*i), (float)(50), (float)(25+4*i), (float)50+hauteurHisto*( (float) gris[i] /(float)max   )         );
+}
+
+
+  libereDonneesImageRGB(&donneesRGB); 
+}
