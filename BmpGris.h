@@ -18,4 +18,13 @@ bool ecrisBMPGris_Dans(DonneesImageGris *donneesImage, char *nom);
 void histo(char * nom);
 void histoTotal(char* nom);
 
+void sobelDirection(DonneesImageGris *donee,DonneesImageGris *resultat);
+void intensiteetdirectiongradient(int largeur, int hauteur,
+        unsigned char **tabgris, float **direction, unsigned char **intensite) ;
+char **initSobelX();
+char **initSobelY();
+char **inittableau2dchar(int x, int y);
+char **filtremasquecarre(unsigned char **tableauinit, int largeur, int hauteur,
+        char **masque, int tailleMasque);
+
 #endif

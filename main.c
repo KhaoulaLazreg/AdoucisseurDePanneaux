@@ -45,6 +45,7 @@ void gestionEvenement(EvenementGfx evenement)
 	static bool imageGriseEcrite;
 	static bool saisie=false;
 	static DonneesImageGris *donneesImage=NULL;
+	static DonneesImageGris *resultat=NULL;
 	
 	int i;
 	switch (evenement)
@@ -79,9 +80,12 @@ bufferSaisie = (char*) malloc(ValeurLimite*sizeof(char));
 couleurCourante(40,140,40);
 			afficheChaine(bufferSaisie, 25, 38, 134);	
 donneesImage=lisBMPGris(nom);
-if(ecrisBMPGris_Dans(donneesImage,"imageGris.bmp"))
-{
+resultat=lisBMPGris(nom);
+sobelDirection(donneesImage,resultat);
+if(ecrisBMPGris_Dans(resultat,"imageGris.bmp"))
+{			
 			image = lisBMPRGB("imageGris.bmp");
+			
 			 imageGriseEcrite=true;
 }
 				//ecrisImage(0,30,Lplateau,Hplateau+30, image->donneesRGB);
@@ -109,11 +113,7 @@ ecrisImage((largeurFenetre()-donneesImage->largeurImage)/2,(hauteurFenetre()-don
 					libereDonneesImageRGB(&image);
 					exit(0);
 					break;
-					
-						case 'V': 
-				case 'v':
-					nom="lena.bmp";
-					break;
+
 				case 'P':
 				case 'p':
 					pleinEcran = !pleinEcran; // Changement de mode plein ecran
