@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include "BmpGris.h"
 #include "GfxLib.h"
+
 #include "math.h"
+
 
 void libereDonneesImageGris(DonneesImageGris **structure)
 {
@@ -153,6 +155,7 @@ for ( i = 0; i < 255; ++i)
 
   libereDonneesImageRGB(&donneesRGB); 
 }
+
 
 void sobelDirection(DonneesImageGris *donee,DonneesImageGris *resultat){
     

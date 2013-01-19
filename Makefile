@@ -5,6 +5,7 @@ CC := gcc
 CFLAGS := -std=gnu99 -Wall -g -I.
 
 LD := gcc
+
 LDFLAGS := -L. -lm -lX11 -lGL -lGLU -lglut 
 ifeq "$(UNAME)" "Darwin"
 	LDFLAGS	:= -framework Carbon -framework OpenGL -framework GLUT
