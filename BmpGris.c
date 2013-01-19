@@ -156,8 +156,49 @@ for ( i = 0; i < 255; ++i)
   libereDonneesImageRGB(&donneesRGB); 
 }
 
+void sobelDirection(DonneesImageGris *donnee,DonneesImageGris *resultat){
+    
+    int i, j;
+    char **gradx;
+    char **grady;
+    char **masque;
+    float temp=0;
+    char t=0;
+for (i = 0; i < donnee->largeurImage; ++i)
+{
+    for (int j = 0; j < donnee->hauteurImage; ++j)
+    {
+        if(donnee->donneesGris[i][j]<150 ){
+           donnee->donneesGris[i][j]=0; 
+        }
+        else
+          donnee->donneesGris[i][j]=255;   
+        //if(donnee->donneesGris[i][j]>200 ){
+       //    donnee->donneesGris[i][j]=255; 
+      //  }
+    }
+}
 
-void sobelDirection(DonneesImageGris *donee,DonneesImageGris *resultat){
+   masque = initSobelX();
+    gradx = filtremasquecarre(donnee->donneesGris, donnee->largeurImage, donnee->hauteurImage, masque, 3);
+    masque = initSobelY();
+    grady = filtremasquecarre(donnee->donneesGris, donnee->largeurImage, donnee->hauteurImage, masque, 3);
+    for (i = 3; i < donnee->hauteurImage - 3; i++) {
+        for (j = 3; j < donnee->largeurImage- 3; j++) {
+
+             temp=atan((double) grady[j][i] / (double) gradx[j][i]);
+             if(temp<0)
+             {
+               t= (char)((1.57+temp)*81.48) ;//128/(pi/2)
+             }
+             else{
+                t=127+ (char)(  temp/(1.57)*128 );
+             }
+           resultat->donneesGris[j][i] =t;
+        }
+    }
+}
+void sobelIntensite(DonneesImageGris *donnee,DonneesImageGris *resultat){
     
     int i, j;
     char **gradx;
@@ -165,11 +206,11 @@ void sobelDirection(DonneesImageGris *donee,DonneesImageGris *resultat){
     char **masque;
     
      masque = initSobelX();
-    gradx = filtremasquecarre(donee->donneesGris, donee->largeurImage, donee->hauteurImage, masque, 3);
+    gradx = filtremasquecarre(donnee->donneesGris, donnee->largeurImage, donnee->hauteurImage, masque, 3);
     masque = initSobelY();
-    grady = filtremasquecarre(donee->donneesGris, donee->largeurImage, donee->hauteurImage, masque, 3);
-    for (i = 3; i < donee->hauteurImage - 3; i++) {
-        for (j = 3; j < donee->largeurImage- 3; j++) {
+    grady = filtremasquecarre(donnee->donneesGris, donnee->largeurImage, donnee->hauteurImage, masque, 3);
+    for (i = 3; i < donnee->hauteurImage - 3; i++) {
+        for (j = 3; j < donnee->largeurImage- 3; j++) {
             resultat->donneesGris[j][i] = sqrt(
                     gradx[j][i] * gradx[j][i] + grady[j][i] * grady[j][i]); //valeur dans le masque
           

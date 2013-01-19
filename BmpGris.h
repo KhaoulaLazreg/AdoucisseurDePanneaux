@@ -19,6 +19,7 @@ void histo(char * nom);
 void histoTotal(char* nom);
 
 
+void sobelIntensite(DonneesImageGris *donee,DonneesImageGris *resultat);
 void sobelDirection(DonneesImageGris *donee,DonneesImageGris *resultat);
 void intensiteetdirectiongradient(int largeur, int hauteur,
         unsigned char **tabgris, float **direction, unsigned char **intensite) ;

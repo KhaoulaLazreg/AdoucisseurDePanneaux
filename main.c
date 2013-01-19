@@ -98,7 +98,7 @@ ecrisImage((largeurFenetre()-donneesImage->largeurImage)/2,(hauteurFenetre()-don
 			BoutonAffichage( bouton,1,25,3); 
 		if(imageGriseEcrite)
 			histo("imageGris.bmp");
-			//histoTotal("./plateaujeu.bmp");
+			
 		imageGriseEcrite=false;
 		libereDonneesImageGris(&donneesImage);
 		libereDonneesImageRGB(&image);
