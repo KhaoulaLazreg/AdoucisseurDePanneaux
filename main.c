@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 {
 	initialiseGfx(argc, argv);
 	
-	prepareFenetreGraphique("Histogramme", LargeurFenetre, HauteurFenetre);
+	prepareFenetreGraphique("Traitement Panneaux", LargeurFenetre, HauteurFenetre);
 
 	lanceBoucleEvenements();
 	
@@ -75,10 +75,12 @@ couleurCourante(40,140,40);
 			afficheChaine(bufferSaisie, 25, 38, 134);	
 donneesImage=lisBMPGris(nom);
 resultat=lisBMPGris(nom);
-donneesImage=filtreMedianRelache(donneesImage);
-  applicationContraste(donneesImage,donneesImage);
+//donneesImage=filtreMedianRelache(donneesImage);
+  //applicationContraste(donneesImage,donneesImage);
+applicationLaplacien(donneesImage,resultat);
+//sobelDirection(donneesImage,resultat);
 
-sobelDirection(donneesImage,resultat);
+
 if(ecrisBMPGris_Dans(resultat,"imageGris.bmp"))
 {			
 			image = lisBMPRGB("imageGris.bmp");

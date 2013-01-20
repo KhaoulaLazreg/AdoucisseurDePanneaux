@@ -113,7 +113,8 @@ void sobelDirection(DonneesImageGris *donnee,DonneesImageGris *resultat){
     char **grady;
     char **masque;
     float temp=0;
-    int seuil=0;
+    donnee=binarisationOtsu(donnee);
+  /*  int seuil=0;
     int compteur=0;
     int max =(l*h)/2;
 
@@ -157,11 +158,12 @@ for (i = 0; i < l; ++i)
       //  }
     }
 }
-
+*/
    masque = initSobelX();
     gradx = filtremasquecarre(donnee->donneesGris, l, h, masque, 3);
     masque = initSobelY();
     grady = filtremasquecarre(donnee->donneesGris, l, h, masque, 3);
+    char t;
     for (i = 3; i < h - 3; i++) {
         for (j = 3; j < l- 3; j++) {
 
@@ -174,6 +176,22 @@ for (i = 0; i < l; ++i)
                 t=127+ (char)(  temp/(1.57)*128 );
              }
            resultat->donneesGris[j][i] =t;
+        }
+    }
+}
+
+void applicationLaplacien(DonneesImageGris *donnee,DonneesImageGris *resultat){
+    donnee=binarisationOtsu(donnee);
+    int i, j;
+    char **laplacien;
+    
+    char **masque;
+    
+     masque = initSobelX();
+   laplacien= filtremasquecarre(donnee->donneesGris, donnee->largeurImage, donnee->hauteurImage, masque, 3);
+     for (i = 3; i < donnee->hauteurImage - 3; i++) {
+        for (j = 3; j < donnee->largeurImage- 3; j++) {
+            resultat->donneesGris[j][i] = laplacien[j][i]; //valeur dans le masque
         }
     }
 }
@@ -194,23 +212,41 @@ void applicationContraste(DonneesImageGris *donnee,DonneesImageGris *resultat){
 }
 void sobelIntensite(DonneesImageGris *donnee,DonneesImageGris *resultat){
     
-    int i, j;
+    int i, j,l=donnee->largeurImage,h=donnee->hauteurImage;
     char **gradx;
     char **grady;
     char **masque;
+    float temp=0;
+    int var=0;
+    int max=0;
     
+   donnee=binarisationOtsu(donnee);
      masque = initSobelX();
     gradx = filtremasquecarre(donnee->donneesGris, donnee->largeurImage, donnee->hauteurImage, masque, 3);
     masque = initSobelY();
     grady = filtremasquecarre(donnee->donneesGris, donnee->largeurImage, donnee->hauteurImage, masque, 3);
-    for (i = 3; i < donnee->hauteurImage - 3; i++) {
-        for (j = 3; j < donnee->largeurImage- 3; j++) {
-            resultat->donneesGris[j][i] = sqrt(
+    for (i = 3; i < h - 3; i++) {
+        for (j = 3; j < l- 3; j++) {
+          var=60+sqrt(
                     gradx[j][i] * gradx[j][i] + grady[j][i] * grady[j][i]); //valeur dans le masque
-          
-           
+          if(var>=255)
+            var=255;
+            if(var>=max)
+                max=var;
+
+             resultat->donneesGris[j][i] = var;
         }
     }
+
+
+    for (i = 3; i < l- 3; i++) {
+        for (j = 3; j < h- 3; j++) {
+          
+
+             resultat->donneesGris[i][j] = (resultat->donneesGris[i][j]/max)*255 ;
+        }
+    }
+
 }/*
 void intensiteetdirectiongradient(int largeur, int hauteur,
         unsigned char **tabgris, float **direction, unsigned char **intensite) //gradient intensité == contour
@@ -236,6 +272,22 @@ void intensiteetdirectiongradient(int largeur, int hauteur,
 //printf("max intensite:%d \n",max);
 //libere gradx et grady
 }*/
+
+char **initLaplacien() {
+    char **masque;
+
+    masque = inittableau2dchar(3, 3);
+    masque[0][0] = -1;
+    masque[0][1] = -1;
+    masque[0][2] = -1;
+    masque[1][0] = -1;
+    masque[1][1] = 8;
+    masque[1][2] = -1;
+    masque[2][0] = -1;
+    masque[2][1] = -1;
+    masque[2][2] = -1;
+    return masque;
+}
 
 char **initContraste() {
     char **masque;
