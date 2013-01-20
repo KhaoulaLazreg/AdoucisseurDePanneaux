@@ -131,7 +131,23 @@ DonneesImageGris *binarisationOtsu(DonneesImageGris *image)
     return newImage;
 }
 
-/*DonneesImageGris* detourageImage(Rectangle rect, DonneesImageGris* imageInitiale)
+int minimum(int A, int B)
+{
+	if(A<B)
+		return A;
+	else
+		return B;
+}
+
+int maximum(int A, int B)
+{
+	if(A<B)
+		return B;
+	else
+		return A;
+}
+
+DonneesImageGris* detourageImage(Rectangle rect, DonneesImageGris* imageInitiale)
 {
 	unsigned int minx,miny;
 	unsigned int maxx,maxy;
@@ -155,4 +171,4 @@ DonneesImageGris *binarisationOtsu(DonneesImageGris *image)
 		}
 	}
 	return ptr;
-}*/
+}
