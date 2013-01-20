@@ -11,7 +11,7 @@ int compareChars (const void *a, const void *b)
 DonneesImageGris *filtreMedianRelache(DonneesImageGris *image)
 {
     int i, j, k;
-    int borneBas = 4, borneHaut = 6;
+    int borneBas = 2, borneHaut = 8;
     bool valeurTrouvee = false;
     
     DonneesImageGris *newImage = (DonneesImageGris*)calloc(1, sizeof(DonneesImageGris));

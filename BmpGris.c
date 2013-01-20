@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "BmpGris.h"
 #include "GfxLib.h"
-
+#include "traitementImage.h"
 #include "math.h"
 
 
@@ -71,57 +71,7 @@ bool ecrisBMPGris_Dans(DonneesImageGris *donneesImage, char *nom)
     
     return true;
 }
-void histoTotal(char* nom){
-DonneesImageRGB *donneesRGB = lisBMPRGB(nom);
-    int i,j,h,l;
-    DonneesImageGris *donneesImage = (DonneesImageGris*)calloc(1, sizeof(DonneesImageGris));
-    donneesImage->largeurImage = donneesRGB->largeurImage;
-    donneesImage->hauteurImage = donneesRGB->hauteurImage;
-    
-    donneesImage->donneesGris = malloc(donneesRGB->largeurImage * sizeof(*donneesImage->donneesGris));
-    
-    for(i = 0; i < donneesImage->largeurImage; i++)
-    donneesImage->donneesGris[i] = malloc(donneesImage->hauteurImage * sizeof(**donneesImage->donneesGris));
 
-    
-    for( i = 0; i < donneesImage->largeurImage; i++)
-    for( j = 0; j < donneesImage->hauteurImage; j++)
-    donneesImage->donneesGris[i][j] = 0.2126 * donneesRGB->donneesRGB[(donneesImage->largeurImage*i+j)*3]
-                    + 0.7152 * donneesRGB->donneesRGB[(donneesImage->largeurImage*i+j)*3+1]
-                    + 0.0722 * donneesRGB->donneesRGB[(donneesImage->largeurImage*i+j)*3+2];
-
-    libereDonneesImageRGB(&donneesRGB);
-
-     int max=1;
-    float hauteurHisto=700;
-    unsigned int gris[256];
-    for ( i = 0; i < 256; i++)
-    {
-       gris[i]=0;
-    }
-   l=donneesImage->largeurImage;
-     h=donneesImage->hauteurImage;
-   for( i = 0; i < l; i++)
-    for( j = 0; j < h; j++){
-   gris[donneesImage->donneesGris[i][j]]+=1;
-}
-for ( i = 0; i < 255; i++)
-{
-    if(max<gris[i])
-    max=gris[i];
-}
-
-
-epaisseurDeTrait(3);
-couleurCourante(40,140,40);
-for ( i = 0; i < 255; ++i)
-{
-    ligne((float)(25+4*i), (float)(50), (float)(25+4*i), (float)50+hauteurHisto*( (float) gris[i] /(float)max   )         );
-}
-
-  free(donneesImage); 
-
-}
 void histo(char * nom){
 
  DonneesImageRGB *donneesRGB = lisBMPRGB(nom);
@@ -165,7 +115,10 @@ void sobelDirection(DonneesImageGris *donnee,DonneesImageGris *resultat){
     float temp=0;
     int seuil=0;
     int compteur=0;
-    int max =2*(l*h)/3;
+    int max =(l*h)/2;
+
+      
+
     char t=0;
         unsigned int gris[256];
     for ( i = 0; i < 256; i++)
@@ -224,6 +177,21 @@ for (i = 0; i < l; ++i)
         }
     }
 }
+void applicationContraste(DonneesImageGris *donnee,DonneesImageGris *resultat){
+    
+    int i, j;
+    char **contraste;
+    
+    char **masque;
+    
+     masque = initSobelX();
+   contraste= filtremasquecarre(donnee->donneesGris, donnee->largeurImage, donnee->hauteurImage, masque, 3);
+     for (i = 3; i < donnee->hauteurImage - 3; i++) {
+        for (j = 3; j < donnee->largeurImage- 3; j++) {
+            resultat->donneesGris[j][i] = contraste[j][i]; //valeur dans le masque
+        }
+    }
+}
 void sobelIntensite(DonneesImageGris *donnee,DonneesImageGris *resultat){
     
     int i, j;
@@ -268,6 +236,23 @@ void intensiteetdirectiongradient(int largeur, int hauteur,
 //printf("max intensite:%d \n",max);
 //libere gradx et grady
 }*/
+
+char **initContraste() {
+    char **masque;
+
+    masque = inittableau2dchar(3, 3);
+    masque[0][0] = 2;
+    masque[0][1] = 5;
+    masque[0][2] = 2;
+    masque[1][0] = 5;
+    masque[1][1] = 20;
+    masque[1][2] = 5;
+    masque[2][0] = 2;
+    masque[2][1] = 5;
+    masque[2][2] = 2;
+    return masque;
+}
+
 char **initSobelY() {
     char **masque;
 

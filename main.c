@@ -61,19 +61,9 @@ void gestionEvenement(EvenementGfx evenement)
 bufferSaisie = (char*) malloc(ValeurLimite*sizeof(char));
     for(i = 0; i < ValeurLimite; i++)
     	bufferSaisie[i] = '\0';
-
-
-
-
-
-		
 			
-			image = lisBMPRGB(nom);
-			
-
-			bouton=declarationBouton(2);
-		
-			
+			image = lisBMPRGB(nom);			
+			bouton=declarationBouton(2);					
 			demandeAnimation_ips(1);
 			break;
 			
@@ -85,8 +75,9 @@ couleurCourante(40,140,40);
 			afficheChaine(bufferSaisie, 25, 38, 134);	
 donneesImage=lisBMPGris(nom);
 resultat=lisBMPGris(nom);
-
 donneesImage=filtreMedianRelache(donneesImage);
+  applicationContraste(donneesImage,donneesImage);
+
 sobelDirection(donneesImage,resultat);
 if(ecrisBMPGris_Dans(resultat,"imageGris.bmp"))
 {			
