@@ -1,0 +1,1 @@
+DonneesImageGris *filtreMedianRelache(DonneesImageGris *image);
