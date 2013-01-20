@@ -10,14 +10,15 @@
 #include <stdbool.h>
 #include <time.h>
 
+
 // Largeur et hauteur par defaut d'une image correspondant a nos criteres
 #define LargeurFenetre 1121
 #define HauteurFenetre 864
 #define NB_BOUTONS 4
 #define ValeurLimite 200
 
-
-
+static bool saisie=false;
+static char nom[200]="panneau.bmp";
 void gestionEvenement(EvenementGfx evenement);
 void scanfgraph(char caractereClavier);
 	static char *bufferSaisie = NULL;
@@ -38,11 +39,11 @@ void gestionEvenement(EvenementGfx evenement)
 
 	static Bouton *bouton;
 
-	static char* nom;
+	static char nom[200]="panneau.bmp";
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
 	static DonneesImageRGB *image = NULL; // L'image a afficher au centre de l'ecran
 	static int numBoutonClique=-1;
-	static bool imageGriseEcrite;
+
 	static bool saisie=false;
 	static DonneesImageGris *donneesImage=NULL;
 
@@ -64,15 +65,15 @@ bufferSaisie = (char*) malloc(ValeurLimite*sizeof(char));
 
 
 
-		nom=(char*)malloc(600);
-			nom="panneau.bmp";
+		
+			
 			image = lisBMPRGB(nom);
 			
 
 			bouton=declarationBouton(2);
-			imageGriseEcrite=false;
+		
 			
-			demandeAnimation_ips(10);
+			demandeAnimation_ips(1);
 			break;
 			
 		case Affichage:
@@ -93,13 +94,12 @@ if(ecrisBMPGris_Dans(resultat,"imageGris.bmp"))
 
 				//ecrisImage(0,30,Lplateau,Hplateau+30, image->donneesRGB);
 
-ecrisImage((largeurFenetre()-donneesImage->largeurImage)/2,(hauteurFenetre()-donneesImage->hauteurImage)/2,donneesImage->largeurImage,donneesImage->hauteurImage, image->donneesRGB);
+ecrisImage((largeurFenetre()-image->largeurImage)/2,(hauteurFenetre()-image->hauteurImage)/2,image->largeurImage,image->hauteurImage, image->donneesRGB);
 			BoutonAffichage( bouton,0,25,3); 
 			BoutonAffichage( bouton,1,25,3); 
-		if(imageGriseEcrite)
-			histo("imageGris.bmp");
+
 			
-		imageGriseEcrite=false;
+
 		libereDonneesImageGris(&donneesImage);
 		libereDonneesImageRGB(&image);
 			break;
@@ -149,17 +149,27 @@ ecrisImage((largeurFenetre()-donneesImage->largeurImage)/2,(hauteurFenetre()-don
 				numBoutonClique=clic(bouton,abscisseSouris(),ordonneeSouris(),2);
 				if(numBoutonClique==0){
 					saisie=true;
-					printf("bouton cliqué 0");
+			
 					 
 					 
 				}
 				if(numBoutonClique==1){
-printf("bouton cliqué 1");
+				
 					saisie=false;
 					if(bufferSaisie!=NULL)
-					 nom=bufferSaisie;
-					bufferSaisie="";
-					 
+						if(bufferSaisie[0]!='\0'){
+							i=0;
+							do{
+							
+								nom[i]=bufferSaisie[i];
+								printf("%c",nom[i]);
+								
+								i++;
+							}while(bufferSaisie[i] != '\0');
+							nom[i]='\0';
+						    for(i = 0; i < ValeurLimite; i++)
+    							bufferSaisie[i] = '\0';
+					 }
 				}
 
 				
@@ -186,7 +196,8 @@ printf("bouton cliqué 1");
 
 
 void scanfgraph(char caractereClavier)
-{
+{		
+	int i=0;
         //Concept : Court-circuiter les raccourcis clavier pour récupérer le caractère
         if (caractereClavier != 13 && bufferSaisie != NULL && strlen(bufferSaisie) < ValeurLimite-2)
         {
@@ -196,6 +207,24 @@ void scanfgraph(char caractereClavier)
                         bufferSaisie[strlen(bufferSaisie)] = caractereClavier;
                         bufferSaisie[strlen(bufferSaisie)+1] = '\0';
                 }
+               /* if(caractereClavier==13){ //touche entrée
+                						
+					if(bufferSaisie!=NULL)
+						if(bufferSaisie[0]!='\0'){
+							i=0;
+							do{
+							
+								nom[i]=bufferSaisie[i];
+								printf("%c",nom[i]);
+								
+								i++;
+							}while(bufferSaisie[i] != '\0');
+							nom[i]='\0';
+						    for(i = 0; i < ValeurLimite; i++)
+    							bufferSaisie[i] = '\0';
+    						saisie=false;
+					 }
+                }*/
                 // Si l'utilisateur appuit sur supprimer
                 else
                         bufferSaisie[strlen(bufferSaisie)-1] = '\0';

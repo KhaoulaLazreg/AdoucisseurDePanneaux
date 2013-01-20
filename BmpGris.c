@@ -158,17 +158,43 @@ for ( i = 0; i < 255; ++i)
 
 void sobelDirection(DonneesImageGris *donnee,DonneesImageGris *resultat){
     
-    int i, j;
+    int i, j,l=donnee->largeurImage,h=donnee->hauteurImage;
     char **gradx;
     char **grady;
     char **masque;
     float temp=0;
+    int seuil=0;
+    int compteur=0;
+    int max =2*(l*h)/3;
     char t=0;
-for (i = 0; i < donnee->largeurImage; ++i)
-{
-    for (int j = 0; j < donnee->hauteurImage; ++j)
+        unsigned int gris[256];
+    for ( i = 0; i < 256; i++)
     {
-        if(donnee->donneesGris[i][j]<150 ){
+       gris[i]=0;
+    }
+for (i = 0; i < l; ++i)
+{
+    for (int j = 0; j < h; ++j)
+    {
+        gris[donnee->donneesGris[i][j]]+=1;
+        
+    }
+}
+for ( i = 0; i < 256; ++i)
+{
+   compteur+= gris[i];
+   if(compteur>=max){
+    seuil=i;
+    break;
+    }
+}
+printf("Valeur seuil: %d\n",seuil);
+for (i = 0; i < l; ++i)
+{
+    for (int j = 0; j < h; ++j)
+    {
+       
+        if(donnee->donneesGris[i][j]<seuil ){
            donnee->donneesGris[i][j]=0; 
         }
         else
@@ -180,11 +206,11 @@ for (i = 0; i < donnee->largeurImage; ++i)
 }
 
    masque = initSobelX();
-    gradx = filtremasquecarre(donnee->donneesGris, donnee->largeurImage, donnee->hauteurImage, masque, 3);
+    gradx = filtremasquecarre(donnee->donneesGris, l, h, masque, 3);
     masque = initSobelY();
-    grady = filtremasquecarre(donnee->donneesGris, donnee->largeurImage, donnee->hauteurImage, masque, 3);
-    for (i = 3; i < donnee->hauteurImage - 3; i++) {
-        for (j = 3; j < donnee->largeurImage- 3; j++) {
+    grady = filtremasquecarre(donnee->donneesGris, l, h, masque, 3);
+    for (i = 3; i < h - 3; i++) {
+        for (j = 3; j < l- 3; j++) {
 
              temp=atan((double) grady[j][i] / (double) gradx[j][i]);
              if(temp<0)
