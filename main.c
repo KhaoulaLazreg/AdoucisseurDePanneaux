@@ -6,6 +6,7 @@
 #include "ESLib.h" // Pour utiliser valeurAleatoire
 #include <string.h>//pour ini bouton: strdup
 #include "BmpGris.h"
+#include "traitementImage.h"
 #include "bouton.h"
 #include <stdbool.h>
 #include <time.h>
@@ -83,8 +84,9 @@ bufferSaisie = (char*) malloc(ValeurLimite*sizeof(char));
 couleurCourante(40,140,40);
 			afficheChaine(bufferSaisie, 25, 38, 134);	
 donneesImage=lisBMPGris(nom);
-
 resultat=lisBMPGris(nom);
+
+donneesImage=filtreMedianRelache(donneesImage);
 sobelDirection(donneesImage,resultat);
 if(ecrisBMPGris_Dans(resultat,"imageGris.bmp"))
 {			

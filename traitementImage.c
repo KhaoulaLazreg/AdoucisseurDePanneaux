@@ -51,5 +51,6 @@ DonneesImageGris *filtreMedianRelache(DonneesImageGris *image)
         valeurTrouvee = false;
 	}
     
+    libereDonneesImageGris(&image);
     return newImage;
 }
