@@ -40,10 +40,12 @@ void gestionEvenement(EvenementGfx evenement)
 
 	static Bouton *bouton;
 
+
 	
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
 	static DonneesImageRGB *image = NULL; // L'image a afficher au centre de l'ecran
 	static int numBoutonClique=-1;
+
 
 
 	static DonneesImageGris *donneesImage=NULL;
@@ -131,8 +133,11 @@ ecrisImage((largeurFenetre()-image->largeurImage)/2,(hauteurFenetre()-image->hau
 
 			}
 			else
-			{scanfgraph(caractereClavier());
-                 rafraichisFenetre();}
+			{
+				printf("ASCII %d\n", caractereClavier());
+				scanfgraph(caractereClavier());
+                rafraichisFenetre();
+            }
 			break;
 			
 		case ClavierSpecial:
@@ -215,6 +220,7 @@ void scanfgraph(char caractereClavier)
                 else
                         bufferSaisie[strlen(bufferSaisie)-1] = '\0';
         }
+
                      if(caractereClavier==13){ //touche entrée
                 						
 					if(bufferSaisie!=NULL)
@@ -233,6 +239,7 @@ void scanfgraph(char caractereClavier)
     						saisie=false;
 					 }
                 }
+
 }
               
 
