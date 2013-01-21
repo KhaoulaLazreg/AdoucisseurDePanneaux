@@ -57,8 +57,6 @@ DonneesImageGris *filtreMedianRelache(DonneesImageGris *image)
     return newImage;
 }
 
-/////////////////////////////////////
-
 void calculeHisto(DonneesImageGris *image, unsigned int *histo)
 {
     int i, j;
@@ -171,4 +169,92 @@ DonneesImageGris* detourageImage(Rectangle rect, DonneesImageGris* imageInitiale
 		}
 	}
 	return ptr;
+}
+
+DonneesImageGris* copiePartieImage(Rectangle rect, DonneesImageGris* imageInitiale, DonneesImageGris* imageRetour)
+{
+
+    unsigned int minx,miny;
+    unsigned int maxx,maxy;
+    int i,j;
+
+    minx=minimum(rect.sommetunX,rect.sommetdeuxX);
+    miny=minimum(rect.sommetunY,rect.sommetdeuxY);
+    maxx=maximum(rect.sommetunX,rect.sommetdeuxX);
+    maxy=maximum(rect.sommetunY,rect.sommetdeuxY);
+
+    for(i=miny; i<maxy-1 ; i=i++)
+    {
+        for(j=minx ; j<maxx-1; j++)
+        {
+            imageRetour-> donneesGris[i][j]= imageInitiale->donneesGris[i][j];
+        }
+    }
+    return imageRetour;
+
+}
+
+
+DonneesImageGris* rechercheZoneDeTexte (DonneesImageGris *donnee)
+{
+    int MBRL=0;
+    int MTC=0;
+    int hauteurfenetre,largeurfenetre;
+    int i;
+    int j;
+    int pixelNoir=0;
+    int nbTransition=0;
+    Rectangle fenetre;
+
+    // Valeurs 
+    int MBRLmax = 0.4;
+    int MBRLmin = 0.01;
+    int MTCmax = 3.8;
+    int MTCmin = 1;
+
+    // Image avec juste le texte à retourner
+    DonneesImageGris* imageTexte;
+    imageTexte = (DonneesImageGris*)malloc(sizeof(DonneesImageGris));
+
+
+    // On déplace la fenetre sur l'image
+    for(hauteurfenetre=1 ; hauteurfenetre<donnee->hauteurImage-tailleFenetreRLSA-1 ; hauteurfenetre=hauteurfenetre+tailleFenetreRLSA)
+    {
+        for(largeurfenetre=1 ; largeurfenetre<donnee->largeurImage-tailleFenetreRLSA-1; largeurfenetre=largeurfenetre+tailleFenetreRLSA)
+        {
+    
+                // On se déplace dans la fenêtre
+                for(i=hauteurfenetre ; i<hauteurfenetre+tailleFenetreRLSA-1 ; i++)
+                {
+                    for(j=1 ; j<largeurfenetre+tailleFenetreRLSA-1; j++)
+                    {
+                        if (donnee->donneesGris[i][j]==255)
+                            pixelNoir=pixelNoir+1;
+
+                        if (donnee->donneesGris[i][j]-donnee->donneesGris[i+1][j]<50)
+                            nbTransition=nbTransition+1;
+                    }   
+                }
+
+            MBRL=pixelNoir/nbTransition;
+            MTC= nbTransition/largeurfenetre;
+
+            // Test si c'est effectivement une zone de texte
+            if(MBRL<=MBRLmax && MBRL>=MBRLmin && MTC<=MTCmax && MTC>=MTCmin)
+            {
+            // On a une zone de texte : on met la fenetre dans l'autre image
+                
+                    fenetre.sommetunX= largeurfenetre;
+                    fenetre.sommetunY= hauteurfenetre;
+                    fenetre.sommetdeuxX= largeurfenetre+tailleFenetreRLSA-1;
+                    fenetre.sommetdeuxY= hauteurfenetre+tailleFenetreRLSA-1;
+
+                imageTexte = copiePartieImage( fenetre,donnee, imageTexte);
+            }
+
+
+
+        }
+     }
+    return imageTexte;
 }
