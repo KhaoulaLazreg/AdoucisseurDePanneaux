@@ -40,12 +40,9 @@ void gestionEvenement(EvenementGfx evenement)
 
 	static Bouton *bouton;
 
-	static char nom[200]="panneau.bmp";
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
 	static DonneesImageRGB *image = NULL; // L'image a afficher au centre de l'ecran
 	static int numBoutonClique=-1;
-
-	static bool saisie=false;
 	static DonneesImageGris *donneesImage=NULL;
 
 	static DonneesImageGris *resultat=NULL;
@@ -129,8 +126,11 @@ ecrisImage((largeurFenetre()-image->largeurImage)/2,(hauteurFenetre()-image->hau
 
 			}
 			else
-			{scanfgraph(caractereClavier());
-                 rafraichisFenetre();}
+			{
+				printf("ASCII %d\n", caractereClavier());
+				scanfgraph(caractereClavier());
+                rafraichisFenetre();
+            }
 			break;
 			
 		case ClavierSpecial:
@@ -208,27 +208,26 @@ void scanfgraph(char caractereClavier)
                         bufferSaisie[strlen(bufferSaisie)] = caractereClavier;
                         bufferSaisie[strlen(bufferSaisie)+1] = '\0';
                 }
-               /* if(caractereClavier==13){ //touche entrée
-                						
-					if(bufferSaisie!=NULL)
-						if(bufferSaisie[0]!='\0'){
-							i=0;
-							do{
-							
-								nom[i]=bufferSaisie[i];
-								printf("%c",nom[i]);
-								
-								i++;
-							}while(bufferSaisie[i] != '\0');
-							nom[i]='\0';
-						    for(i = 0; i < ValeurLimite; i++)
-    							bufferSaisie[i] = '\0';
-    						saisie=false;
-					 }
-                }*/
                 // Si l'utilisateur appuit sur supprimer
                 else
                         bufferSaisie[strlen(bufferSaisie)-1] = '\0';
+        }
+        else if(caractereClavier==13){ //touche entrée						
+			if(bufferSaisie!=NULL)
+				if(bufferSaisie[0]!='\0'){
+					i=0;
+					do{
+					
+						nom[i]=bufferSaisie[i];
+						printf("%c",nom[i]);
+						
+						i++;
+					}while(bufferSaisie[i] != '\0');
+					nom[i]='\0';
+				    for(i = 0; i < ValeurLimite; i++)
+						bufferSaisie[i] = '\0';
+					saisie=false;
+			 }
         }
 }
               
