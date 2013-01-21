@@ -295,7 +295,8 @@ int l=donnee->largeurImage,h=donnee->hauteurImage;
 DonneesImageGris *transformeeHough(DonneesImageGris *image, double gamma)
 {
 	long i, j, k, l, m, w, h;
-	double bg, r_res, t_res, rho, r, theta, x, y, v, max_val, min_val, *pp;
+	double bg, r_res, t_res, rho, r, theta, x, y, v, max_val, min_val;
+    unsigned char *pp;
 	
     DonneesImageGris *newImage = (DonneesImageGris*)calloc(1, sizeof(DonneesImageGris));
     newImage->largeurImage = image->largeurImage;

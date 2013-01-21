@@ -7,25 +7,30 @@
 
 DonneesImageGris *texte(DonneesImageGris *resultat){
 DonneesImageGris* un =RLSA_I(resultat, resultat->largeurImage*0.06, false);
- /*   negatif(resultat);
+   negatif(resultat);
 DonneesImageGris* deux= RLSA_I(resultat, resultat->largeurImage*0.06, false);
-negatif(un);
 
+int tempo=0;
  int i,j;
 
     for(i=0;i< resultat->largeurImage;i++)
         for(j=0;j< resultat->hauteurImage;j++){
-            resultat->donneesGris[i][j]=128;
-            if (un->donneesGris[i][j]==deux->donneesGris[i][j])
-            {
-                resultat->donneesGris[i][j]=un->donneesGris[i][j];
-            }
+            resultat->donneesGris[i][j]=255;
+            if(un->donneesGris[i][j]==0||deux->donneesGris[i][j]==0)
+                tempo=0;
+            else{
+          tempo=un->donneesGris[i][j]+deux->donneesGris[i][j];
+            if(tempo>255)
+                tempo=255;
+        }
+                resultat->donneesGris[i][j]=tempo;;
+            
 
 }
 
-*/
 
-return un;//resultat;
+
+return resultat;
 }
 
 

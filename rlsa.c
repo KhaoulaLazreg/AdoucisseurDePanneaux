@@ -17,16 +17,18 @@ DonneesImageGris *RLSA_I(DonneesImageGris *image, int maxGapSize, bool processGa
     
      for( i = 0; i < image->largeurImage; i++)
     for( j = 0; j < image->hauteurImage; j++){
-    	imageI->donneesGris[i][j]=128;
+    	imageI->donneesGris[i][j]=255;
     }
 imageH=RLSA_H(image, maxGapSize, processGapsWithImageBorders);
 imageV=RLSA_V(image, maxGapSize, processGapsWithImageBorders);
 
      for( i = 0; i < image->largeurImage; i++)
     for( j = 0; j < image->hauteurImage; j++){
-    	if(imageV->donneesGris[i][j]==128&&imageH->donneesGris[i][j]==128)
+    	if(imageV->donneesGris[i][j]==255&&imageH->donneesGris[i][j]==255)
     		imageI->donneesGris[i][j]=image->donneesGris[i][j];
     }
+    //negatif(imageI);
+//imageI=RLSA_H(imageI, (int)(maxGapSize*0.6), processGapsWithImageBorders);
     libereDonneesImageGris(&imageV);
      libereDonneesImageGris(&imageH);
 return imageI;
@@ -67,7 +69,7 @@ DonneesImageGris *RLSA_H(DonneesImageGris *image, int maxGapSize, bool processGa
 				{
 					while(debutVide < ptr)
 					{
-						*debutVide = 128;//remplacement
+						*debutVide = 255;//remplacement
 						debutVide++;
 					}
 				}
@@ -122,7 +124,7 @@ DonneesImageGris *RLSA_V(DonneesImageGris *image, int maxGapSize, bool processGa
 				{
 					while(debutVide < ptr)
 					{
-						*debutVide = 128;//remplacement
+						*debutVide = 255;//remplacement
 						debutVide++;
 					}
 				}
