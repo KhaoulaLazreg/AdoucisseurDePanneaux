@@ -4,6 +4,103 @@
 #include "GfxLib.h"
 #include "traitementImage.h"
 #include "math.h"
+/*int maxConnexite(DonneesImageGris* tab){
+    int i,j,l=tab->largeurImage,h=hauteurImage;
+    for (i=0;i<h;i++) 
+    {
+        for(j=0;j<l;i++){//attention aux incices; parcours des colonnes
+            if(tab->donneesGris[j][i]
+        }
+    }
+}
+
+bool estConnexe(DonneesImageGris *donnee,Rectangle fenetre){
+    int x0= fenetre.sommetunX,y0=fenetre.sommetunY ,x1=fenetre.sommetdeuxX ,y1=fenetre.sommetdeuxY ;
+int i,j,normal=0,inverse=0,a=0,b=0;
+    DonneesImageGris* val= (DonneesImageGris*)malloc(sizeof(DonneesImageGris));
+    val->hauteurImage = h;
+    val->largeurImage = l;
+    val->donneesGris=(unsigned char **)inittableau2dchar(x1-x0, y1-y0);
+    for ( i = x0; i < x1; ++i)
+    {
+        for (j=y0;j<y1;j++)
+        {
+        //traitement image normale
+            val->donneesGris[a][b]=donnee->donneesGris[i][j];
+
+
+
+        //traitement négatif
+
+            b++;
+        }
+        a++;
+
+    }
+
+
+}
+
+DonneesImageGris* rechercheConnexite (DonneesImageGris *donnee)
+{
+
+    int i;
+    int j;
+    Rectangle fenetre;
+    int l=donnee->largeurImage,h=donnee->hauteurImage;
+    // Valeurs 
+int tailleMaxLettre=l/5,tailleMinLettre=l/100;
+                   fenetre.sommetunX= largeurfenetre;
+                    fenetre.sommetunY= hauteurfenetre;
+                    fenetre.sommetdeuxX= largeurfenetre+tailleFenetreRLSA-1;
+                    fenetre.sommetdeuxY= hauteurfenetre+tailleFenetreRLSA-1;
+
+    // Image avec juste le texte à retourner
+    DonneesImageGris* imageTexte= (DonneesImageGris*)malloc(sizeof(DonneesImageGris));
+    imageTexte->hauteurImage = h;
+    imageTexte->largeurImage = l;
+    imageTexte->donneesGris =(unsigned char **)inittableau2dchar(l, h);
+
+    for (i = 0; i < l; ++i)
+        {
+           for (j= 0; j < h; ++j)
+           {
+               imageTexte->donneesGris[i][j]=128;
+           }
+       }
+
+    // On déplace la fenetre sur l'image
+    for(hauteurfenetre=0 ; hauteurfenetre<donnee->hauteurImage-tailleFenetreRLSA ; hauteurfenetre+=tailleFenetreRLSA)
+    {
+        for(largeurfenetre=0 ; largeurfenetre<donnee->largeurImage-tailleFenetreRLSA; largeurfenetre+=tailleFenetreRLSA)
+        {
+    
+                // On se déplace dans la fenêtre
+                for(i=hauteurfenetre ; i<hauteurfenetre+tailleFenetreRLSA-1 ; i++)
+                {
+                    for(j=0 ; j<largeurfenetre+tailleFenetreRLSA; j++)
+                    {
+                        if (donnee->donneesGris[j][i]>150)
+                            pixelNoir+=1;
+
+                        if (donnee->donneesGris[j][i]-donnee->donneesGris[j+1][i]<50)
+                            nbTransition+=1;
+                    }   
+                }
+
+
+
+
+        }
+     }
+    return imageTexte;
+}
+
+
+*/
+
+
+
 
 
 void libereDonneesImageGris(DonneesImageGris **structure)

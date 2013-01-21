@@ -77,9 +77,15 @@ donneesImage=lisBMPGris(nom);
 resultat=lisBMPGris(nom);
 //donneesImage=filtreMedianRelache(donneesImage);
   //applicationContraste(donneesImage,donneesImage);
-applicationLaplacien(donneesImage,resultat);
-//sobelDirection(donneesImage,resultat);
 
+
+applicationLaplacien(donneesImage,resultat);
+
+
+
+//sobelDirection(donneesImage,resultat);
+resultat=RLSA_I(resultat, resultat->largeurImage*0.06, false);
+//resultat=rechercheZoneDeTexte (resultat);
 
 if(ecrisBMPGris_Dans(resultat,"imageGris.bmp"))
 {			

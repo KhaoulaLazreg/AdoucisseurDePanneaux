@@ -1,6 +1,6 @@
 UNAME := $(shell uname)
 
-CC := gcc
+CC := clang
 #CFLAGS := -std=gnu99 -O2 -I.
 CFLAGS := -std=gnu99 -Wall -g -I.
 

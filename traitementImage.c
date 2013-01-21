@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <math.h>
+#include <stdio.h>
 #include "BmpGris.h"
 #include "traitementImage.h"
 
@@ -161,9 +162,9 @@ DonneesImageGris* detourageImage(Rectangle rect, DonneesImageGris* imageInitiale
 	ptr-> largeurImage=maxx-minx;
 	ptr-> hauteurImage=maxy-miny;
 
-	for(i=1 ; i<ptr-> hauteurImage-1 ; i=i++)
+	for(i=0 ; i<ptr-> hauteurImage ; i=i++)
 	{
-		for(j=1 ; j<ptr-> largeurImage-1; j++)
+		for(j=0 ; j<ptr-> largeurImage; j++)
 		{
 			ptr-> donneesGris[i][j]= imageInitiale->donneesGris[i+miny][j+minx];
 		}
@@ -183,11 +184,11 @@ DonneesImageGris* copiePartieImage(Rectangle rect, DonneesImageGris* imageInitia
     maxx=maximum(rect.sommetunX,rect.sommetdeuxX);
     maxy=maximum(rect.sommetunY,rect.sommetdeuxY);
 
-    for(i=miny; i<maxy-1 ; i=i++)
+    for(i=miny; i<maxy; i++)
     {
-        for(j=minx ; j<maxx-1; j++)
+        for(j=minx ; j<maxx; j++)
         {
-            imageRetour-> donneesGris[i][j]= imageInitiale->donneesGris[i][j];
+            imageRetour-> donneesGris[j][i]= 128;// imageInitiale->donneesGris[j][i];
         }
     }
     return imageRetour;
@@ -197,59 +198,91 @@ DonneesImageGris* copiePartieImage(Rectangle rect, DonneesImageGris* imageInitia
 
 DonneesImageGris* rechercheZoneDeTexte (DonneesImageGris *donnee)
 {
-    int MBRL=0;
-    int MTC=0;
+    float MBRL=0;
+    float MTC=0;
     int hauteurfenetre,largeurfenetre;
     int i;
     int j;
-    int pixelNoir=0;
-    int nbTransition=0;
+    float pixelNoir=0;
+    float nbTransition=0;
     Rectangle fenetre;
-
+    int l=donnee->largeurImage,h=donnee->hauteurImage;
     // Valeurs 
-    int MBRLmax = 0.4;
-    int MBRLmin = 0.01;
-    int MTCmax = 3.8;
-    int MTCmin = 1;
+    float MBRLmax = 14.8;
+    float MBRLmin = 0.37;
+    float MTCmax = 3.8;
+    float MTCmin = 1;
 
     // Image avec juste le texte à retourner
     DonneesImageGris* imageTexte;
     imageTexte = (DonneesImageGris*)malloc(sizeof(DonneesImageGris));
-
+    imageTexte->hauteurImage = h;
+    imageTexte->largeurImage = l;
+    
+    imageTexte->donneesGris =(unsigned char **)inittableau2dchar(l, h);
+    for (i = 0; i < l; ++i)
+        {
+           for (j= 0; j < h; ++j)
+           {
+               imageTexte->donneesGris[i][j]=donnee->donneesGris[i][j];
+           }
+       }
 
     // On déplace la fenetre sur l'image
-    for(hauteurfenetre=1 ; hauteurfenetre<donnee->hauteurImage-tailleFenetreRLSA-1 ; hauteurfenetre=hauteurfenetre+tailleFenetreRLSA)
+    for(hauteurfenetre=0 ; hauteurfenetre<donnee->hauteurImage-tailleFenetreRLSA ; hauteurfenetre+=tailleFenetreRLSA)
     {
-        for(largeurfenetre=1 ; largeurfenetre<donnee->largeurImage-tailleFenetreRLSA-1; largeurfenetre=largeurfenetre+tailleFenetreRLSA)
+        for(largeurfenetre=0 ; largeurfenetre<donnee->largeurImage-tailleFenetreRLSA; largeurfenetre+=tailleFenetreRLSA)
         {
     
                 // On se déplace dans la fenêtre
                 for(i=hauteurfenetre ; i<hauteurfenetre+tailleFenetreRLSA-1 ; i++)
                 {
-                    for(j=1 ; j<largeurfenetre+tailleFenetreRLSA-1; j++)
+                    for(j=0 ; j<largeurfenetre+tailleFenetreRLSA; j++)
                     {
-                        if (donnee->donneesGris[i][j]==255)
-                            pixelNoir=pixelNoir+1;
+                        if (donnee->donneesGris[j][i]>150)
+                            pixelNoir+=1;
 
-                        if (donnee->donneesGris[i][j]-donnee->donneesGris[i+1][j]<50)
-                            nbTransition=nbTransition+1;
+                        if ((donnee->donneesGris[j][i]-donnee->donneesGris[j+1][i]>150)||(donnee->donneesGris[j][i]-donnee->donneesGris[j+1][i]<-150))
+                            nbTransition+=1;
+                        
+                        //val max: 255 val min -255
                     }   
                 }
+                if(nbTransition<1)
+                    nbTransition=1;
+                if (largeurfenetre<1)
+                    largeurfenetre=1;
+            MBRL=pixelNoir/(nbTransition);
+            MTC= nbTransition/(largeurfenetre);
 
-            MBRL=pixelNoir/nbTransition;
-            MTC= nbTransition/largeurfenetre;
-
+/*
+int l=donnee->largeurImage,h=donnee->hauteurImage;
+        
+        for (i = 0; i < l; ++i)
+        {
+           for (j= 0; j < h; ++j)
+           {
+               if(donnee->donneesGris[i][j]>255)
+                donnee->donneesGris[i][j]=255;
+            if(donnee->donneesGris[i][j]<0)
+                donnee->donneesGris[i][j]=0;
+           }
+        }*/
+            printf("MBRL: %f  Pn: %d nT: %d MTC: %f LF: %d\n",MBRL,(int)pixelNoir,(int)nbTransition,MTC,(int)largeurfenetre);
             // Test si c'est effectivement une zone de texte
             if(MBRL<=MBRLmax && MBRL>=MBRLmin && MTC<=MTCmax && MTC>=MTCmin)
             {
             // On a une zone de texte : on met la fenetre dans l'autre image
-                
+              printf("Coucou\n");
                     fenetre.sommetunX= largeurfenetre;
                     fenetre.sommetunY= hauteurfenetre;
                     fenetre.sommetdeuxX= largeurfenetre+tailleFenetreRLSA-1;
                     fenetre.sommetdeuxY= hauteurfenetre+tailleFenetreRLSA-1;
 
-                imageTexte = copiePartieImage( fenetre,donnee, imageTexte);
+               
+               imageTexte = copiePartieImage( fenetre,donnee, imageTexte);
+               printf("Coucou1\n");
+
             }
 
 
