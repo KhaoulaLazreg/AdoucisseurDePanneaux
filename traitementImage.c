@@ -291,3 +291,86 @@ int l=donnee->largeurImage,h=donnee->hauteurImage;
      }
     return imageTexte;
 }
+
+DonneesImageGris *transformeeHough(DonneesImageGris *image, double gamma)
+{
+	long i, j, k, l, m, w, h;
+	double bg, r_res, t_res, rho, r, theta, x, y, v, max_val, min_val, *pp;
+	
+    DonneesImageGris *newImage = (DonneesImageGris*)calloc(1, sizeof(DonneesImageGris));
+    newImage->largeurImage = image->largeurImage;
+    newImage->hauteurImage = image->hauteurImage;
+    
+	char **newDonneesGris = inittableau2dchar(image->largeurImage, image->hauteurImage);
+    newImage->donneesGris = (unsigned char **)newDonneesGris;
+ 
+	double PI = atan2(1, 1) * 4;
+ 
+	for (i = 0, bg = 0; i < image->largeurImage; i++)
+		for (j = 0; j < image->hauteurImage; j++)
+			bg += image->donneesGris[i][j];
+	fprintf(stderr, "[info] background is %f\n", bg);
+	bg = (bg /= (image->largeurImage * image->hauteurImage) > 0.5) ? 1 : 0;
+ 
+	for (i = 0; i < image->largeurImage; i++)
+		for (j = 0; j < image->hauteurImage; j++)
+        {
+            if(bg)
+                newImage->donneesGris[i][j] = 255 - image->donneesGris[i][j];
+            else
+                newImage->donneesGris[i][j] = image->donneesGris[i][j];
+        }
+ 
+#	define RRATIO 1.5
+#	define TRATIO 1.5
+	x = newImage->largeurImage - .5;
+	y = newImage->hauteurImage - .5;
+	r = sqrt(x * x + y * y) / 2;
+ 
+	w = newImage->largeurImage / TRATIO;
+	h = newImage->hauteurImage / RRATIO;
+	r_res = r / h;
+	t_res = PI * 2 / w;
+ 
+	for (i = 0; i < newImage->largeurImage; i++) {
+        x = i - newImage->largeurImage / 2. + .5;
+		for (j = 0; j < newImage->hauteurImage; j++) {
+			y = j - newImage->hauteurImage / 2. + .5;
+			r = sqrt(x * x + y * y);
+			v = newImage->donneesGris[i][j];
+ 
+			if (!v) continue;
+ 
+			for (k = 0; k < w; k++) {
+				theta = k * t_res - PI;
+				rho = x * cos(theta) + y * sin(theta);
+				if (rho >= 0) {
+					m = rho / r_res;
+					l = k;
+				} else {
+					m = -rho / r_res;
+					l = (k + w/2.);
+					l %= w;
+				}
+				newImage->donneesGris[l][m] += v * r;
+			}
+		}
+		fprintf(stderr, "\r%ld", i);
+	}
+	fprintf(stderr, "\n");
+ 
+	max_val = 0;
+	min_val = 1e100;
+	pp = &(newImage->donneesGris[newImage->largeurImage - 1][newImage->hauteurImage - 1]);
+	for (i = newImage->largeurImage * newImage->hauteurImage - 1; i >= 0; i--, pp--) {
+		if (max_val < *pp) max_val = *pp;
+		if (min_val > *pp) min_val = *pp;
+	}
+ 
+	pp = &(newImage->donneesGris[newImage->largeurImage - 1][newImage->hauteurImage - 1]);
+	for (i = newImage->largeurImage * newImage->hauteurImage - 1; i >= 0; i--, pp--) {
+		*pp = pow((*pp - min_val)/ (max_val - min_val), gamma);
+	}
+ 
+	return newImage;
+}
