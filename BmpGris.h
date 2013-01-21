@@ -13,10 +13,10 @@ typedef struct
 void libereDonneesImageGris(DonneesImageGris **structure);
 
 DonneesImageGris *lisBMPGris(char *nom);
-
+DonneesImageGris *texte(DonneesImageGris *resultat);
 bool ecrisBMPGris_Dans(DonneesImageGris *donneesImage, char *nom);
 void histo(char * nom);
-
+void negatif(DonneesImageGris *im);
 void applicationLaplacien(DonneesImageGris *donnee,DonneesImageGris *resultat);
 void applicationContraste(DonneesImageGris *donnee,DonneesImageGris *resultat);
 void sobelIntensite(DonneesImageGris *donee,DonneesImageGris *resultat);

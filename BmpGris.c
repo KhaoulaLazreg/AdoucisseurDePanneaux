@@ -4,102 +4,45 @@
 #include "GfxLib.h"
 #include "traitementImage.h"
 #include "math.h"
-/*int maxConnexite(DonneesImageGris* tab){
-    int i,j,l=tab->largeurImage,h=hauteurImage;
-    for (i=0;i<h;i++) 
-    {
-        for(j=0;j<l;i++){//attention aux incices; parcours des colonnes
-            if(tab->donneesGris[j][i]
-        }
-    }
-}
 
-bool estConnexe(DonneesImageGris *donnee,Rectangle fenetre){
-    int x0= fenetre.sommetunX,y0=fenetre.sommetunY ,x1=fenetre.sommetdeuxX ,y1=fenetre.sommetdeuxY ;
-int i,j,normal=0,inverse=0,a=0,b=0;
-    DonneesImageGris* val= (DonneesImageGris*)malloc(sizeof(DonneesImageGris));
-    val->hauteurImage = h;
-    val->largeurImage = l;
-    val->donneesGris=(unsigned char **)inittableau2dchar(x1-x0, y1-y0);
-    for ( i = x0; i < x1; ++i)
-    {
-        for (j=y0;j<y1;j++)
-        {
-        //traitement image normale
-            val->donneesGris[a][b]=donnee->donneesGris[i][j];
+DonneesImageGris *texte(DonneesImageGris *resultat){
+DonneesImageGris* un =RLSA_I(resultat, resultat->largeurImage*0.06, false);
+ /*   negatif(resultat);
+DonneesImageGris* deux= RLSA_I(resultat, resultat->largeurImage*0.06, false);
+negatif(un);
 
+ int i,j;
 
-
-        //traitement négatif
-
-            b++;
-        }
-        a++;
-
-    }
-
+    for(i=0;i< resultat->largeurImage;i++)
+        for(j=0;j< resultat->hauteurImage;j++){
+            resultat->donneesGris[i][j]=128;
+            if (un->donneesGris[i][j]==deux->donneesGris[i][j])
+            {
+                resultat->donneesGris[i][j]=un->donneesGris[i][j];
+            }
 
 }
-
-DonneesImageGris* rechercheConnexite (DonneesImageGris *donnee)
-{
-
-    int i;
-    int j;
-    Rectangle fenetre;
-    int l=donnee->largeurImage,h=donnee->hauteurImage;
-    // Valeurs 
-int tailleMaxLettre=l/5,tailleMinLettre=l/100;
-                   fenetre.sommetunX= largeurfenetre;
-                    fenetre.sommetunY= hauteurfenetre;
-                    fenetre.sommetdeuxX= largeurfenetre+tailleFenetreRLSA-1;
-                    fenetre.sommetdeuxY= hauteurfenetre+tailleFenetreRLSA-1;
-
-    // Image avec juste le texte à retourner
-    DonneesImageGris* imageTexte= (DonneesImageGris*)malloc(sizeof(DonneesImageGris));
-    imageTexte->hauteurImage = h;
-    imageTexte->largeurImage = l;
-    imageTexte->donneesGris =(unsigned char **)inittableau2dchar(l, h);
-
-    for (i = 0; i < l; ++i)
-        {
-           for (j= 0; j < h; ++j)
-           {
-               imageTexte->donneesGris[i][j]=128;
-           }
-       }
-
-    // On déplace la fenetre sur l'image
-    for(hauteurfenetre=0 ; hauteurfenetre<donnee->hauteurImage-tailleFenetreRLSA ; hauteurfenetre+=tailleFenetreRLSA)
-    {
-        for(largeurfenetre=0 ; largeurfenetre<donnee->largeurImage-tailleFenetreRLSA; largeurfenetre+=tailleFenetreRLSA)
-        {
-    
-                // On se déplace dans la fenêtre
-                for(i=hauteurfenetre ; i<hauteurfenetre+tailleFenetreRLSA-1 ; i++)
-                {
-                    for(j=0 ; j<largeurfenetre+tailleFenetreRLSA; j++)
-                    {
-                        if (donnee->donneesGris[j][i]>150)
-                            pixelNoir+=1;
-
-                        if (donnee->donneesGris[j][i]-donnee->donneesGris[j+1][i]<50)
-                            nbTransition+=1;
-                    }   
-                }
-
-
-
-
-        }
-     }
-    return imageTexte;
-}
-
 
 */
 
+return un;//resultat;
+}
 
+
+void negatif(DonneesImageGris *im) //sur image binaire
+{
+    int i,j;
+
+    for(i=0;i< im->largeurImage;i++)
+        for(j=0;j< im->hauteurImage;j++){
+            if (im->donneesGris[i][j]==0)
+            {
+                im->donneesGris[i][j]=255;
+            }
+            else 
+                im->donneesGris[i][j]=0;
+}
+}
 
 
 
@@ -211,52 +154,8 @@ void sobelDirection(DonneesImageGris *donnee,DonneesImageGris *resultat){
     char **masque;
     float temp=0;
     donnee=binarisationOtsu(donnee);
-  /*  int seuil=0;
-    int compteur=0;
-    int max =(l*h)/2;
 
-      
-
-    char t=0;
-        unsigned int gris[256];
-    for ( i = 0; i < 256; i++)
-    {
-       gris[i]=0;
-    }
-for (i = 0; i < l; ++i)
-{
-    for (int j = 0; j < h; ++j)
-    {
-        gris[donnee->donneesGris[i][j]]+=1;
-        
-    }
-}
-for ( i = 0; i < 256; ++i)
-{
-   compteur+= gris[i];
-   if(compteur>=max){
-    seuil=i;
-    break;
-    }
-}
-printf("Valeur seuil: %d\n",seuil);
-for (i = 0; i < l; ++i)
-{
-    for (int j = 0; j < h; ++j)
-    {
-       
-        if(donnee->donneesGris[i][j]<seuil ){
-           donnee->donneesGris[i][j]=0; 
-        }
-        else
-          donnee->donneesGris[i][j]=255;   
-        //if(donnee->donneesGris[i][j]>200 ){
-       //    donnee->donneesGris[i][j]=255; 
-      //  }
-    }
-}
-*/
-   masque = initSobelX();
+    masque = initSobelX();
     gradx = filtremasquecarre(donnee->donneesGris, l, h, masque, 3);
     masque = initSobelY();
     grady = filtremasquecarre(donnee->donneesGris, l, h, masque, 3);

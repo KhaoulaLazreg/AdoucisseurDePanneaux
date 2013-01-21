@@ -40,12 +40,12 @@ void gestionEvenement(EvenementGfx evenement)
 
 	static Bouton *bouton;
 
-	static char nom[200]="panneau.bmp";
+	
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
 	static DonneesImageRGB *image = NULL; // L'image a afficher au centre de l'ecran
 	static int numBoutonClique=-1;
 
-	static bool saisie=false;
+
 	static DonneesImageGris *donneesImage=NULL;
 
 	static DonneesImageGris *resultat=NULL;
@@ -82,11 +82,13 @@ resultat=lisBMPGris(nom);
 applicationLaplacien(donneesImage,resultat);
 
 
-
 //sobelDirection(donneesImage,resultat);
-resultat=RLSA_I(resultat, resultat->largeurImage*0.06, false);
+//negatif(resultat);
+resultat=texte(resultat);
 //resultat=rechercheZoneDeTexte (resultat);
+//resultat=RLSA_I(resultat, resultat->largeurImage*0.06, false);
 
+//resultat=filtreMedianRelache(resultat);
 if(ecrisBMPGris_Dans(resultat,"imageGris.bmp"))
 {			
 			image = lisBMPRGB("imageGris.bmp");
@@ -208,7 +210,12 @@ void scanfgraph(char caractereClavier)
                         bufferSaisie[strlen(bufferSaisie)] = caractereClavier;
                         bufferSaisie[strlen(bufferSaisie)+1] = '\0';
                 }
-               /* if(caractereClavier==13){ //touche entrée
+
+                // Si l'utilisateur appuit sur supprimer
+                else
+                        bufferSaisie[strlen(bufferSaisie)-1] = '\0';
+        }
+                     if(caractereClavier==13){ //touche entrée
                 						
 					if(bufferSaisie!=NULL)
 						if(bufferSaisie[0]!='\0'){
@@ -225,11 +232,7 @@ void scanfgraph(char caractereClavier)
     							bufferSaisie[i] = '\0';
     						saisie=false;
 					 }
-                }*/
-                // Si l'utilisateur appuit sur supprimer
-                else
-                        bufferSaisie[strlen(bufferSaisie)-1] = '\0';
-        }
+                }
 }
               
 
