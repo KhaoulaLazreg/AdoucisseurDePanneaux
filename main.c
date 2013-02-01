@@ -19,6 +19,10 @@
 #define ValeurLimite 200
 
 static bool saisie=false;
+static bool rien=false;
+static bool GG=false;
+static bool HH=false;
+static bool JJ=false;
 static char nom[200]="a2.bmp";
 void gestionEvenement(EvenementGfx evenement);
 void scanfgraph(char caractereClavier);
@@ -77,7 +81,7 @@ couleurCourante(40,140,40);
 			afficheChaine(bufferSaisie, 25, 38, 134);	
 donneesImage=lisBMPGris(nom);
 resultat=lisBMPGris(nom);
-//donneesImage=filtreMedianRelache(donneesImage);
+donneesImage=filtreMedianRelache(donneesImage);
   //applicationContraste(donneesImage,donneesImage);
 
 
@@ -86,7 +90,13 @@ applicationLaplacien(donneesImage,resultat);
 
 //sobelDirection(donneesImage,resultat);
 //negatif(resultat);
-resultat=texte(resultat);
+
+if(GG)
+resultat=texteG(resultat);
+if(HH)
+resultat=texteH(resultat);
+if(JJ)
+resultat=texteJ(resultat);
 //resultat=rechercheZoneDeTexte (resultat);
 //resultat=RLSA_I(resultat, resultat->largeurImage*0.06, false);
 
@@ -121,7 +131,34 @@ ecrisImage((largeurFenetre()-image->largeurImage)/2,(hauteurFenetre()-image->hau
 					libereDonneesImageRGB(&image);
 					exit(0);
 					break;
-
+				case 'G': /* Pour sortir quelque peu proprement du programme */
+				case 'g':
+					GG=true;
+					rien=false;
+					HH=false;
+					JJ=false;
+					break;
+				case 'H': /* Pour sortir quelque peu proprement du programme */
+				case 'h':
+					GG=false;
+					rien=false;
+					HH=true;
+					JJ=false;
+					break;
+				case 'J': /* Pour sortir quelque peu proprement du programme */
+				case 'j':
+					GG=false;
+					rien=false;
+					HH=false;
+					JJ=true;
+					break;
+				case 'K': /* Pour sortir quelque peu proprement du programme */
+				case 'k':
+					GG=false;
+					rien=true;
+					HH=false;
+					JJ=false;
+					break;
 				case 'P':
 				case 'p':
 					pleinEcran = !pleinEcran; // Changement de mode plein ecran

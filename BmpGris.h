@@ -13,7 +13,9 @@ typedef struct
 void libereDonneesImageGris(DonneesImageGris **structure);
 
 DonneesImageGris *lisBMPGris(char *nom);
-DonneesImageGris *texte(DonneesImageGris *resultat);
+DonneesImageGris *texteG(DonneesImageGris *resultat);
+DonneesImageGris *texteH(DonneesImageGris *resultat);
+DonneesImageGris *texteJ(DonneesImageGris *resultat);
 bool ecrisBMPGris_Dans(DonneesImageGris *donneesImage, char *nom);
 void histo(char * nom);
 void negatif(DonneesImageGris *im);

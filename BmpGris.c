@@ -5,10 +5,19 @@
 #include "traitementImage.h"
 #include "math.h"
 
-DonneesImageGris *texte(DonneesImageGris *resultat){
-    //negatif(resultat);
-//DonneesImageGris* un =RLSA_I(resultat, resultat->largeurImage*0.06, false);
-/*   
+
+DonneesImageGris *texteG(DonneesImageGris *resultat){
+   
+resultat =RLSA_I(resultat, resultat->largeurImage*0.06, false);
+ 
+
+return  resultat;
+}
+
+DonneesImageGris *texteH(DonneesImageGris *resultat){
+    negatif(resultat);
+DonneesImageGris* un =RLSA_I(resultat, resultat->largeurImage*0.06, false);
+ 
 DonneesImageGris* deux= RLSA_I(resultat, resultat->largeurImage*0.06, false);
 
 int tempo=0;
@@ -27,13 +36,43 @@ int tempo=0;
                 resultat->donneesGris[i][j]=tempo;;
             
 
-}*/
-//negatif(resultat);
-//resultat=RLSA_H(resultat, (int)(resultat->largeurImage*0.06), false);
+}
+negatif(resultat);
+resultat=RLSA_H(resultat, (int)(resultat->largeurImage*0.06), false);
+negatif(resultat);
 //resultat=transformeeHough(resultat,0.5);
 
 return  resultat;
 }
+DonneesImageGris *texteJ(DonneesImageGris *resultat){
+    negatif(resultat);
+DonneesImageGris* un =RLSA_I(resultat, resultat->largeurImage*0.06, false);
+ 
+DonneesImageGris* deux= RLSA_I(resultat, resultat->largeurImage*0.06, false);
+
+int tempo=0;
+ int i,j;
+
+    for(i=0;i< resultat->largeurImage;i++)
+        for(j=0;j< resultat->hauteurImage;j++){
+            resultat->donneesGris[i][j]=255;
+            if(un->donneesGris[i][j]==0||deux->donneesGris[i][j]==0)
+                tempo=0;
+            else{
+          tempo=un->donneesGris[i][j]+deux->donneesGris[i][j];
+            if(tempo>255)
+                tempo=255;
+        }
+                resultat->donneesGris[i][j]=tempo;;
+            
+
+}
+
+//resultat=transformeeHough(resultat,0.5);
+
+return  resultat;
+}
+
 
 
 void negatif(DonneesImageGris *im) //sur image binaire
