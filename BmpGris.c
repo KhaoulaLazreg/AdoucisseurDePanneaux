@@ -6,8 +6,9 @@
 #include "math.h"
 
 DonneesImageGris *texte(DonneesImageGris *resultat){
-DonneesImageGris* un =RLSA_I(resultat, resultat->largeurImage*0.06, false);
-   negatif(resultat);
+    //negatif(resultat);
+//DonneesImageGris* un =RLSA_I(resultat, resultat->largeurImage*0.06, false);
+/*   
 DonneesImageGris* deux= RLSA_I(resultat, resultat->largeurImage*0.06, false);
 
 int tempo=0;
@@ -26,11 +27,12 @@ int tempo=0;
                 resultat->donneesGris[i][j]=tempo;;
             
 
-}
+}*/
+//negatif(resultat);
+//resultat=RLSA_H(resultat, (int)(resultat->largeurImage*0.06), false);
+//resultat=transformeeHough(resultat,0.5);
 
-
-
-return resultat;
+return  resultat;
 }
 
 

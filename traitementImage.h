@@ -11,6 +11,7 @@ typedef struct _Rectangle {
 } Rectangle;
 int maximum(int A, int B);
 int minimum(int A, int B);
+DonneesImageGris *transformeeHough(DonneesImageGris *image, double gamma);
 DonneesImageGris *filtreMedianRelache(DonneesImageGris *image);
 DonneesImageGris *binarisationOtsu(DonneesImageGris *image);
 DonneesImageGris* detourageImage(Rectangle rect, DonneesImageGris* imageInitiale);

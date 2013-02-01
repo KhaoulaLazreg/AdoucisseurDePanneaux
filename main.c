@@ -19,7 +19,7 @@
 #define ValeurLimite 200
 
 static bool saisie=false;
-static char nom[200]="panneau.bmp";
+static char nom[200]="a2.bmp";
 void gestionEvenement(EvenementGfx evenement);
 void scanfgraph(char caractereClavier);
 	static char *bufferSaisie = NULL;
